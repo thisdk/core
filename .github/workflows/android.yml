@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    env:
+      SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
+      SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -19,9 +22,6 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew clean assemble
-      env:
-        SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
-        SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
@@ -32,6 +32,3 @@ jobs:
         - echo "${{secrets.SIGNING_SECRET_KEY_RING_FILE}}" > ~/secring.gpg.b64
         - base64 -d ~/secring.gpg.b64 > ~/secring.gpg
         - ./gradlew publish -Psigning.keyId=${{secrets.SIGNING_KEY_ID}} -Psigning.password=${{secrets.SIGNING_PASSWORD}} -Psigning.secretKeyRingFile=$(echo ~/secring.gpg)
-        env:
-          SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
-          SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
