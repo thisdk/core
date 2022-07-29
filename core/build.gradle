@@ -7,6 +7,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+apply from: 'maven-publish.gradle'
+
 android {
     compileSdk 32
     defaultConfig {
